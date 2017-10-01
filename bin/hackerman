@@ -1,4 +1,4 @@
 #!/bin/sh -e
 
 # Launch main from here with any args
-python3 "`dirname $0`/../main.py" "$@"
+python3 -Bu "`dirname $0`/../main.py" "$@"
