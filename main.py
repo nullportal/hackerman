@@ -2,6 +2,7 @@ import sys
 import time
 
 from req.github import Github
+from document import Document
 
 def main(args):
 
@@ -29,10 +30,10 @@ def main(args):
 
             # Dump raw text from each file in repo
             raw_text = gh.get_raw(download_url)
-            print(raw_text)
+            doc = Document(raw_text)
+            doc.draw(delay=(2,5))
 
         # XXX Keep from spamming GH
         break
-
 
 if __name__ == "__main__": main(sys.argv)
