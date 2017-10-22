@@ -1,46 +1,38 @@
 import sys
 import time
 
-from terminal.terminal import Terminal
+from req.github import Github
 
 def main(args):
-    """ Print cool hacker-looking stuff to terminal """
 
-    t = Terminal()
+    # Strip away superfluous args
+    args = args[1]
 
-    print(f"term area:          {t.area}")
-    print(f"term dimensions:    {t.dimensions}")
-    print(f"term width:         {t.width}")
-    print(f"term height:        {t.height}")
-    print(f"term centre:        {t.centre}")
+    gh    = Github()
+    resp  = gh.search(args)
+    items = resp["items"]
 
-    pos      = 0,0
+    for item in items:
+        contents = gh.get_contents(item["contents_url"])
+        for content in contents:
 
-    i    = 1
-    while True:
+            # TODO Just build a dict off of this outside of loop
+            name         = content["name"]
+            download_url = content["download_url"]  # Raw text
 
-        for j in range(t.width):
-            time.sleep(0.01)
+            # Don't dump lacunas
+            if download_url is None:
+                continue
 
-            x,y = 0, i
-            x  += j
+            # Dump file name, path to file
+            print(f"{name}: {download_url}")
 
-            t.draw_char(ch=str(i), pos=(x,y))
+            # Dump raw text from each file in repo
+            raw_text = gh.get_raw(download_url)
+            print(raw_text)
 
-        i += 1
+        # XXX Keep from spamming GH
+        break
 
-        for k in range(t.width):
-            time.sleep(0.01)
-
-            x,y = t.width, i
-            x  -= k
-
-            t.draw_char(ch=str(i), pos=(x,y))
-
-        i += 1
-
-        # Start over
-        if i == t.height:
-            i = 1
 
 if __name__ == "__main__": main(sys.argv)
