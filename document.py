@@ -50,17 +50,23 @@ class Document():
         return (f.count('\n') < 1 or os.path.isfile(f))
 
 class Page():
-    def __init__(self, document):
-        #print(f"Page::__init__({self}, {len(document)})")
-        self.doc = document
+    def __init__(self, s):
+        self.lines = [Line(line + '\n') for line in s.split('\n')]
 
     def draw(self):
         """ Dump page to stdout """
-        sys.stdout.write(self.doc)
+        for line in self.lines:
+            line.draw()
+            time.sleep(random.randrange(0, 2))
 
 class Line():
-    """ TODO """
-    pass
+    def __init__(self, s):
+        self.text = s
+
+    def draw(self):
+        sys.stdout.write(self.text)
+
+
 class Word():
     """ TODO """
     pass

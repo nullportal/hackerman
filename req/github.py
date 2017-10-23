@@ -12,7 +12,7 @@ class Github():
 
     def search(self, query):
 
-        query = self.base_api_url + "search/repositories?q=hack&language=" + query
+        query = self.base_api_url + "search/repositories?q=" + query
         print("Query:", query)
 
         resp = requests.get(query)
