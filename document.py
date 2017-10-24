@@ -55,7 +55,7 @@ class Page():
 class Line():
     def __init__(self, s):
         """ Split line on words, count whitespace(s) as words, too """
-        self.words = [Word(w) for w in re.findall("(\S+|\s)", s)]
+        self.words = [Word(w) for w in re.findall("(\S+|\s+)", s)]
 
     def type(self):
         for word in self.words:
