@@ -38,7 +38,7 @@ class Document():
         text  = re.sub(r"^\s*$", "", text)
 
         # Split text into chunks we can display at a time
-        pages = re.findall(r".*\n"*term_height, text)
+        pages = re.findall(".*\n"*text_height, text)
 
         return pages
 
@@ -73,7 +73,7 @@ class Word():
     def draw(self):
         for char in self.chars:
             char.draw()
-            time.sleep(random.uniform(0, 0.01))
+            time.sleep(random.uniform(0, 0.05))
 
 class Char():
     def __init__(self, c):
