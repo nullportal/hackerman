@@ -18,12 +18,8 @@ class Document():
         # Populate our one-to-many class relationship
         self.pages.extend([Page(p) for p in self._retrieve_pages(f)])
 
-    def draw(self, delay=(1,5)):
-        """ Dump document to stdout with random :delay: dumps
-        in the range of delay=(min,max) """
-
-        # TODO Check delay param is valid
-
+    def draw(self):
+        """ Dump document to stdout """
         for page in self.pages:
             page.draw()
 
@@ -48,6 +44,7 @@ class Document():
 
 class Page():
     def __init__(self, s):
+        # Grab each line on newline (but add newline char back in)
         self.lines = [Line(line + '\n') for line in s.split('\n')]
 
     def draw(self):
