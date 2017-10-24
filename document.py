@@ -18,10 +18,10 @@ class Document():
         # Populate our one-to-many class relationship
         self.pages.extend([Page(p) for p in self._retrieve_pages(f)])
 
-    def draw(self):
+    def type(self):
         """ Dump document to stdout """
         for page in self.pages:
-            page.draw()
+            page.type()
 
     def _retrieve_pages(self, text):
         """ Return indexed list of Page classes """
@@ -47,19 +47,19 @@ class Page():
         # Grab each line on newline (but add newline char back in)
         self.lines = [Line(line + '\n') for line in s.split('\n')]
 
-    def draw(self):
+    def type(self):
         """ Dump page to stdout """
         for line in self.lines:
-            line.draw()
+            line.type()
 
 class Line():
     def __init__(self, s):
         """ Split line on words, count whitespace(s) as words, too """
         self.words = [Word(w) for w in re.findall("(\S+|\s)", s)]
 
-    def draw(self):
+    def type(self):
         for word in self.words:
-            word.draw()
+            word.type()
             time.sleep(random.uniform(0, 0.3))
 
 
@@ -67,16 +67,16 @@ class Word():
     def __init__(self, s):
         self.chars = [Char(c) for c in s]
 
-    def draw(self):
+    def type(self):
         for char in self.chars:
-            char.draw()
+            char.type()
             time.sleep(random.uniform(0, 0.05))
 
 class Char():
     def __init__(self, c):
         self.text = c
 
-    def draw(self):
+    def type(self):
         sys.stdout.write(self.text)
         sys.stdout.flush()
 

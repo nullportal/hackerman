@@ -50,7 +50,7 @@ def main(args):
             # Dump raw text from each file in repo
             raw_text = gh.get_raw(download_url)
             doc = Document(raw_text)
-            doc.draw()
+            doc.type()
 
         # XXX Keep from spamming GH
         break
