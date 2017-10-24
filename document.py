@@ -54,7 +54,6 @@ class Page():
         """ Dump page to stdout """
         for line in self.lines:
             line.draw()
-            #time.sleep(random.randrange(0, 2))
 
 class Line():
     def __init__(self, s):
@@ -69,13 +68,18 @@ class Line():
 
 class Word():
     def __init__(self, s):
-        self.text = s
+        self.chars = [Char(c) for c in s]
+
+    def draw(self):
+        for char in self.chars:
+            char.draw()
+            time.sleep(random.uniform(0, 0.01))
+
+class Char():
+    def __init__(self, c):
+        self.text = c
 
     def draw(self):
         sys.stdout.write(self.text)
         sys.stdout.flush()
-
-class Char():
-    """ TODO """
-    pass
 
