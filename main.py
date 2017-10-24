@@ -52,7 +52,4 @@ def main(args):
             doc = Document(raw_text)
             doc.type()
 
-        # XXX Keep from spamming GH
-        break
-
 if __name__ == "__main__": main(sys.argv)

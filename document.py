@@ -8,20 +8,28 @@ from terminal.terminal import Terminal
 
 class Document():
     def __init__(self, f):
-        """ Accept file or text and build textual representation """
+        """ Take :f: (file or text) and build textual representation """
         self.pages = []
 
         # If this is a file, load text
         if self._is_file(f):
             f = open(f, 'r').read()
 
+        # Assign here to allow quick dump,
+        # if so desired
+        self.text = f
+
         # Populate our one-to-many class relationship
         self.pages.extend([Page(p) for p in self._retrieve_pages(f)])
 
     def type(self):
-        """ Dump document to stdout """
+        """ Type document to stdout """
         for page in self.pages:
             page.type()
+
+    def draw(self):
+        """ Dump document to stdout """
+        print(self.text)
 
     def _retrieve_pages(self, text):
         """ Return indexed list of Page classes """
@@ -48,7 +56,7 @@ class Page():
         self.lines = [Line(line + '\n') for line in s.split('\n')]
 
     def type(self):
-        """ Dump page to stdout """
+        """ Type page to stdout """
         for line in self.lines:
             line.type()
 
@@ -58,6 +66,7 @@ class Line():
         self.words = [Word(w) for w in re.findall("(\S+|\s+)", s)]
 
     def type(self):
+        """ Type line to stdout """
         for word in self.words:
             word.type()
             time.sleep(random.uniform(0, 0.3))
@@ -65,9 +74,11 @@ class Line():
 
 class Word():
     def __init__(self, s):
+        """ Break up word into single chars """
         self.chars = [Char(c) for c in s]
 
     def type(self):
+        """ Type word to stdout """
         for char in self.chars:
             char.type()
             time.sleep(random.uniform(0, 0.05))
@@ -77,6 +88,7 @@ class Char():
         self.text = c
 
     def type(self):
+        """ Just dump char to stdout """
         sys.stdout.write(self.text)
-        sys.stdout.flush()
+        sys.stdout.flush()  # Ensure we write before newline
 
