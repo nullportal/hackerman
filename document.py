@@ -26,7 +26,6 @@ class Document():
 
         for page in self.pages:
             page.draw()
-            time.sleep(random.randint(delay[0], delay[1]))
 
     def _retrieve_pages(self, text):
         """ Return indexed list of Page classes """
@@ -34,8 +33,6 @@ class Document():
         term_height = Terminal().height - 10          # Gee, I wonder
         text_height = text.count('\n')                # Num lines
         pages_reqd  = -(-text_height // term_height)  # Ceiling
-
-        #print(f"term_height: {term_height}, text_height: {text_height}, pages: {pages_reqd}")
 
         # Clean text (rm runs of newlines)
         text  = re.sub(r"^\s*$", "", text)
@@ -57,19 +54,27 @@ class Page():
         """ Dump page to stdout """
         for line in self.lines:
             line.draw()
-            time.sleep(random.randrange(0, 2))
+            #time.sleep(random.randrange(0, 2))
 
 class Line():
+    def __init__(self, s):
+        """ Split line on words, count whitespace(s) as words, too """
+        self.words = [Word(w) for w in re.findall("(\S+|\s)", s)]
+
+    def draw(self):
+        for word in self.words:
+            word.draw()
+            time.sleep(random.uniform(0, 0.3))
+
+
+class Word():
     def __init__(self, s):
         self.text = s
 
     def draw(self):
         sys.stdout.write(self.text)
+        sys.stdout.flush()
 
-
-class Word():
-    """ TODO """
-    pass
 class Char():
     """ TODO """
     pass
