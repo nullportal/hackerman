@@ -26,7 +26,7 @@ GracefulExit.sigint_listen()
 def main(args):
 
     args  = _parse_args(args)
-    gh    = Github()
+    gh    = Github(args.client_credentials)  # Init with client_id:client_secret, if present
     resp  = gh.search(args.query_str, args.query_lang)
 
     try:
@@ -95,6 +95,10 @@ def _parse_args(argv):
                         help="typing",
                         default=1,
                         type=positive)
+    parser.add_argument("-S", "--client-credentials",
+                        help="string matching 'CLIENT_ID:CLIENT_SECRET', with proper id and secret",
+                        default=None,
+                        type=str)
 
     return parser.parse_args()
 
