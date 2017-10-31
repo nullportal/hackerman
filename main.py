@@ -1,30 +1,33 @@
 import sys
 import time
+import signal
 import argparse
 
 from req.github import Github
 from document import Document
 
+# Don't spam terminal on <C-c>
+class GracefulExit():
+    def sigint_listen():
+        """ For external use without import """
+        signal.signal(signal.SIGINT, GracefulExit._graceful_exit)
+
+    def _graceful_exit(signal, frame):
+        """ Graceful exit on <C-c> """
+
+        # Drain anything still in stdout buf
+        sys.stdout.flush()
+
+        # Print notice and exit
+        print("\n -- ABORTING (reason: SIGINT) -- \n")
+        exit(1)
+GracefulExit.sigint_listen()
+
 def main(args):
 
-    args = _parse_args(args)
-    print(args)
-
-    """ TODO Replace below with proper argument parser
-    # Check for query param
-    if len(args) < 2:
-        print("Error: Run hackerman with a query parameter")
-        print("  eg: ./bin/hackerman hackhackhack")
-        exit(1)
-
-    # Strip away superfluous args
-    args = args[1]
-    """
-
-    exit(1)
-
+    args  = _parse_args(args)
     gh    = Github()
-    resp  = gh.search(args)
+    resp  = gh.search(args.query_str, args.query_lang)
 
     try:
         items = resp["items"]
@@ -57,8 +60,13 @@ def main(args):
 
             # Dump raw text from each file in repo
             raw_text = gh.get_raw(download_url)
-            doc = Document(raw_text)
-            doc.type()
+
+            try:
+                doc = Document(raw_text)
+                doc.type(args.typing_speed)
+            except:
+                print("Whoa there!")
+
 
 def _parse_args(argv):
     """ Parse and Validate arguments
@@ -66,19 +74,30 @@ def _parse_args(argv):
     :return args: parsed, validated argument(s)
     """
 
+    def positive(n):
+        """ Ensure we receive a :n:umber equal to, or greater than, 1 """
+        n = int(n)
+        if n < 1:
+            raise argparse.ArgumentTypeError(f"'{n}' invalid - must be a positive integer")
+        return n
+
     parser = argparse.ArgumentParser(prog="hackerman",
-                                     usage="%(prog)s [options]")
-    parser.add_argument("-q", "--query",
+                                     usage="%(prog)s [OPTS]")
+    parser.add_argument("-q", "--query-str",
                         help="general string to search for using Github API",
+                        default="mooo",
                         type=str)
-    parser.add_argument("-l", "--query-language",
+    parser.add_argument("-l", "--query-lang",
                         help="programming language to filter results by (eg: cpp)",
+                        default="oink",
                         type=str)
-    parser.add_argument("-w", "--wpm",
-                        help="typing speed in words per minute",
-                        type=int)
+    parser.add_argument("-s", "--typing-speed",
+                        help="typing",
+                        default=1,
+                        type=positive)
 
     return parser.parse_args()
 
 
 if __name__ == "__main__": main(sys.argv)
+

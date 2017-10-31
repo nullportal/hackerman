@@ -22,10 +22,12 @@ class Document():
         # Populate our one-to-many class relationship
         self.pages.extend([Page(p) for p in self._retrieve_pages(f)])
 
-    def type(self):
-        """ Type document to stdout """
+    def type(self, speed=1):
+        """ Type document to stdout at specified :speed: """
+
+        # For our messy circular dependency
         for page in self.pages:
-            page.type()
+            page.type(speed)
 
     def draw(self):
         """ Dump document to stdout """
@@ -55,21 +57,21 @@ class Page():
         # Grab each line on newline (but add newline char back in)
         self.lines = [Line(line + '\n') for line in s.split('\n')]
 
-    def type(self):
+    def type(self, speed):
         """ Type page to stdout """
         for line in self.lines:
-            line.type()
+            line.type(speed)
 
 class Line():
     def __init__(self, s):
         """ Split line on words, count whitespace(s) as words, too """
         self.words = [Word(w) for w in re.findall("(\S+|\s+)", s)]
 
-    def type(self):
+    def type(self, speed):
         """ Type line to stdout """
         for word in self.words:
-            word.type()
-            time.sleep(random.uniform(0, 0.3))
+            word.type(speed)
+            time.sleep(random.uniform(0, 2/speed))
 
 
 class Word():
@@ -77,11 +79,11 @@ class Word():
         """ Break up word into single chars """
         self.chars = [Char(c) for c in s]
 
-    def type(self):
+    def type(self, speed):
         """ Type word to stdout """
         for char in self.chars:
             char.type()
-            time.sleep(random.uniform(0, 0.05))
+            time.sleep(random.uniform(0, 1/speed))
 
 class Char():
     def __init__(self, c):

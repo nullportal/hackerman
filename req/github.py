@@ -10,12 +10,17 @@ class Github():
         # TODO Set User-Agent, client_secret:key
         pass
 
-    def search(self, query):
+    def search(self, query_str, query_lang=None):
 
-        query = self.base_api_url + "search/repositories?q=" + query
-        print("Query:", query)
+        api_query = self.base_api_url + "search/repositories?q=" + query_str
 
-        resp = requests.get(query)
+        # Add optional language filter
+        if query_lang:
+            api_query += f"language:{query_lang}"
+
+        print("Query:", api_query)
+
+        resp = requests.get(api_query)
         return json.loads(resp.text)
 
     def get_contents(self, query):
