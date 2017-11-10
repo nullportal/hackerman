@@ -20,7 +20,7 @@ class GracefulExit():
 
         # Print notice and exit
         print("\n -- ABORTING (reason: SIGINT) -- \n")
-        exit(1)
+        sys.exit(0)
 GracefulExit.sigint_listen()
 
 def main(args):
@@ -67,7 +67,7 @@ def main(args):
             try:
                 doc = Document(raw_text)
                 doc.type(args.typing_speed)
-            except:
+            except Exception:
                 print("Whoa there!")
 
 def _file_is_boring(f):
