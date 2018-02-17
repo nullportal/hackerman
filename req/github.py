@@ -19,7 +19,7 @@ class Github():
 
         # Add optional language filter
         if query_lang:
-            api_query += f"language:{query_lang}"
+            api_query += f"&language:{query_lang}"
 
         print("Query:", api_query)
 

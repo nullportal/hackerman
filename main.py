@@ -48,7 +48,8 @@ def main(args):
         for content in contents:
 
             # TODO Just build a dict off of this outside of loop
-            name         = content["name"]
+            file_name    = content["name"]
+            file_type    = content["type"]
             download_url = content["download_url"]  # Raw text
 
             # Don't dump lacunas
@@ -56,9 +57,9 @@ def main(args):
                 continue
 
             # Dump file name, path to file
-            print(f"{name}: {download_url}")
+            print(f"{file_name} ({file_type}): {download_url}")
 
-            if _file_is_boring(name):
+            if _file_is_boring(file_name):
                 continue
 
             # Dump raw text from each file in repo
@@ -77,7 +78,11 @@ def _file_is_boring(f):
         is_boring = True
     elif f.endswith('.md'):
         is_boring = True
-    elif "GEM" in f.upper():
+    elif f.endswith('.txt'):
+        is_boring = True
+    elif "gem" in f.lower():
+        is_boring = True
+    elif "license" in f.lower():
         is_boring = True
     return is_boring
 
@@ -98,15 +103,15 @@ def _parse_args(argv):
                                      usage="%(prog)s [OPTS]")
     parser.add_argument("-q", "--query-str",
                         help="general string to search for using Github API",
-                        default="mooo",
+                        default="termq",
                         type=str)
     parser.add_argument("-l", "--query-lang",
                         help="programming language to filter results by (eg: cpp)",
-                        default="oink",
+                        default="cpp",
                         type=str)
     parser.add_argument("-s", "--typing-speed",
                         help="typing",
-                        default=1,
+                        default=20,
                         type=positive)
     parser.add_argument("-S", "--client-credentials",
                         help="string matching 'CLIENT_ID:CLIENT_SECRET', with proper id and secret",
