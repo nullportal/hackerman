@@ -10,3 +10,11 @@ cd hackerman
 ./bin/hackerman "abc"  # or whatever
 ctrl+c                 # to exit
 ```
+
+### Invoke anywhere
+```
+# Put in your path:
+    ./export-bin
+# Use it
+    hackerman "foo"
+```
