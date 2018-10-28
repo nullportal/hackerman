@@ -1,0 +1,4 @@
+#!/bin/sh
+
+sudo ln -s $(echo $(find `pwd` -type f -executable -name hackerman)) /usr/bin/hackerman
+

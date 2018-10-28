@@ -14,6 +14,14 @@ cd hackerman
 ctrl+c                 # to exit
 ```
 
+### Invoke anywhere
+```
+# Put in your path:
+    ./export-bin
+# Use it
+    hackerman "foo"
+```
+
 ### Get help
 ```
 ./bin/hackerman --help
